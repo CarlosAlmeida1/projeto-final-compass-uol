@@ -15,7 +15,7 @@
 
 ## 🔍 Apresentação do Projeto
 
-A empresa "Fast Engineering S/A" está em busca de uma solução da empresa terceira "TI SOLUÇÕES INCRÍVEIS". O eCommerce da "Fast Engineering S/A" está em expansão e a solução atual não está mais suportando o aumento significativo de acessos e compras, que têm crescido 20% ao mês desde o início do ano.
+A empresa "Fast Engineering S/A" está em busca de uma solução da empresa terceira "TI SOLUÇÕES INCRÍVEIS". O eCommerce da "Fast Engineering S/A" está em expansão e a solução atual não está mais suportando o aumento significativo de acessos e compras. A empresa terceira propôs uma nova arquitetura para o website da "Fast Engineering S/A" na AWS, utilizando serviços como Amazon EKS, Amazon RDS, Amazon S3, entre outros.
 
 ### 🛠️ Tecnologias Atuais
 
