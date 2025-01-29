@@ -51,6 +51,13 @@ Comunicação:
 
 - Clientes acessam o ambiente on-premise diretamente.
 
+<div align="center">
+  <img src="images/estrutura-atual.jpg" width="500px" alt="Diagrama do Cenário Atual">
+</div>
+<div align="center">
+  <strong>Diagrama da Estrutura Atual</strong>
+</div>
+
 ### 🚀 Arquitetura de Migração
 
 A arquitetura de migração proposta para o eCommerce da "Fast Engineering S/A" é composta por 3 servidores, sendo um para o Banco de Dados MySQL, um para a aplicação utilizando REACT e um para o servidor de web server que armazena estáticos como fotos e links. Será usado o MGN para a migração dos dados, DMS para a replicação dos dados e o RDS para o banco de dados. S3 para armazenamento de arquivos estáticos.
@@ -128,9 +135,9 @@ A arquitetura de migração proposta para o eCommerce da "Fast Engineering S/A" 
 
 **Custo inicial:** 0,00 USD
 
-**Custo mensal:** 1.256,79 USD
+**Custo mensal:** 785,07 USD
 
-**Custo total de 12 meses:** 15.081,48 USD
+**Custo total de 12 meses:** 9.420,84 USD
 
 ### Resumo da Estimativa
 
@@ -164,7 +171,165 @@ A arquitetura de migração proposta para o eCommerce da "Fast Engineering S/A" 
   - Região: Leste dos EUA (N. da Virgínia)
 
 <div align="center">
-    <img src="images/calculator-2.png" width="500px" alt="Arquitetura de Migração">
+    <img src="images/calculator-1.png" width="500px" alt="Arquitetura de Migração">
+</div>
+<div align="center">
+    <strong>Custos de migração Lift-and-Shift</strong>
+</div>
+
+### 🏗️ Arquitetura Moderna
+
+Este diagrama representa uma arquitetura robusta e escalável na AWS, utilizando o Amazon EKS (Elastic Kubernetes Service) como orquestrador de contêineres. A infraestrutura está distribuída em duas zonas de disponibilidade (AZs), garantindo alta disponibilidade, segurança e resiliência.
+
+<div align="center">
+    <img src="images/arquitetura-moderna.png" width="500px" alt="Arquitetura Moderna">
+</div>
+
+## 🔄 Fluxo da Arquitetura Kubernetes na AWS
+
+### 📌 Entrada dos Usuários
+
+1. **Usuário acessa a aplicação pela internet**
+   - O tráfego é direcionado para o **Amazon Route 53 (DNS Gerenciado)**.
+2. **Route 53 resolve o domínio e encaminha a requisição**
+   - A requisição é enviada para o **Amazon CloudFront (CDN e Cache Global)**.
+3. **CloudFront verifica regras de segurança no AWS WAF (Web Application Firewall)**
+   - Se aprovado, encaminha o tráfego para a infraestrutura da AWS.
+4. **Acesso ao Internet Gateway (IGW)**
+   - O IGW permite que a VPC receba tráfego da internet.
+5. **Ingress Controller do Kubernetes**
+   - Roteia o tráfego para os serviços do cluster **EKS**.
+
+---
+
+## 📌 Infraestrutura AWS e Kubernetes
+
+### **1️⃣ Rede e Subnets**
+
+- **VPC (Virtual Private Cloud)**
+  - Contém **subnets públicas e privadas** para segmentação da infraestrutura.
+- **Subnets Públicas**
+  - Possuem um **NAT Gateway** para permitir que instâncias privadas acessem a internet.
+- **Subnets Privadas**
+  - Contêm os **worker nodes do Kubernetes** e o **banco de dados RDS MySQL**.
+
+### **2️⃣ Cluster Kubernetes (EKS) e Cargas de Trabalho**
+
+- **Amazon EKS (Elastic Kubernetes Service)**
+  - Gerencia os **worker nodes** e os **pods** da aplicação.
+- **Worker Nodes Kubernetes (EC2 Instances)**
+  - Distribuídos em **duas zonas de disponibilidade (AZs)**.
+  - Contêm o **kubelet**, que gerencia os pods.
+- **Pods Executando Serviços da Aplicação**
+  - **API 1**
+  - **API 2**
+  - **Servidor Nginx**
+- **Horizontal Pod Autoscaler (HPA)**
+  - Escala automaticamente os pods de acordo com a demanda.
+- **Auto Scaling Group**
+  - Garante que novos worker nodes sejam criados quando necessário.
+
+---
+
+## 📌 Banco de Dados e Armazenamento
+
+- **Amazon RDS MySQL (Banco de Dados Principal)**
+  - Hospedado na **subnet privada**.
+- **Amazon RDS Replica**
+  - Replica os dados para a **segunda zona de disponibilidade**.
+- **Amazon S3**
+  - Armazena logs, backups e arquivos estáticos.
+- **AWS Secrets Manager**
+  - Gerencia credenciais e segredos da aplicação.
+- **AWS KMS (Key Management Service)**
+  - Criptografa dados sensíveis.
+
+---
+
+## 📌 Monitoramento e Segurança
+
+- **Amazon CloudWatch**
+  - Monitora métricas, logs e gera alertas.
+- **AWS WAF (Web Application Firewall)**
+  - Protege contra ataques cibernéticos e acessos não autorizados.
+
+---
+
+## 📌 Fluxo dos Desenvolvedores (CI/CD)
+
+1. **Desenvolvedor faz push do código para o GitHub**
+2. **AWS CodeBuild**
+   - Compila e testa o código.
+   - Gera imagens Docker para implantação.
+3. **AWS ECR (Elastic Container Registry)**
+   - Armazena as imagens Docker.
+   - Conecta-se ao **Amazon EKS** para deploy.
+
+---
+
+## 💰 Calculadora de Custos - Arquitetura Moderna
+
+### AWS Pricing Calculator
+
+**Data da estimativa:** 29 de janeiro de 2025
+
+**Custo inicial:** 0,00 USD
+
+**Custo mensal:** 1.256,79 USD
+
+**Custo total de 12 meses:** 15.081,48 USD
+
+### Resumo da Estimativa
+
+- **Amazon Virtual Private Cloud (VPC):**
+
+  - Custo inicial: 0,00 USD
+  - Custo mensal: 461,15 USD
+  - Região: Leste dos EUA (N. da Virgínia)
+
+- **AWS Data Transfer:**
+
+  - Custo inicial: 0,00 USD
+  - Custo mensal: 40,96 USD
+  - Região: Leste dos EUA (N. da Virgínia)
+
+- **Amazon EKS:**
+
+  - Custo inicial: 0,00 USD
+  - Custo mensal: 73,00 USD
+  - Região: Leste dos EUA (N. da Virgínia)
+
+- **Amazon CloudWatch:**
+
+  - Custo inicial: 0,00 USD
+  - Custo mensal: 197,10 USD
+  - Região: Leste dos EUA (N. da Virgínia)
+
+- **Amazon RDS for MySQL:**
+
+  - Custo inicial: 0,00 USD
+  - Custo mensal: 236,18 USD
+  - Região: Leste dos EUA (N. da Virgínia)
+
+- **Amazon Elastic Container Registry:**
+
+  - Custo inicial: 0,00 USD
+  - Custo mensal: 50,00 USD
+  - Região: Leste dos EUA (N. da Virgínia)
+
+- **AWS CodeBuild:**
+
+  - Custo inicial: 0,00 USD
+  - Custo mensal: 90,00 USD
+  - Região: Leste dos EUA (N. da Virgínia)
+
+- **Amazon Route 53:**
+  - Custo inicial: 0,00 USD
+  - Custo mensal: 108,40 USD
+  - Região: Leste dos EUA (N. da Virgínia)
+
+<div align="center">
+    <img src="images/calculator-2.png" width="500px" alt="Arquitetura Moderna">
 </div>
 
 ## 🛠️ Serviços Utilizados
