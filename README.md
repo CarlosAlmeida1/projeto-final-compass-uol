@@ -32,7 +32,6 @@ Para a construção da arquitetura do futuro website da "Fast Engineering S/A", 
 - MultiAZ
 - Segurança de backup de dados
 - Persistência dos dados
-- Balanceamento de carga com healthcheck
 - Segurança
 
 ---
